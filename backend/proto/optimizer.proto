@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package optimizer;
+
+option go_package = "github.com/eddie081202/Cloud-Optimizer-App/backend/proto";
+
+import "google/protobuf/timestamp.proto";
+
+service OptimizerService {
+  // List resources across cloud providers
+  rpc ListResources(ListResourcesRequest) returns (ListResourcesResponse) {}
+  
+  // Get resource metrics
+  rpc GetResourceMetrics(GetResourceMetricsRequest) returns (GetResourceMetricsResponse) {}
+  
+  // Get optimization recommendations
+  rpc GetRecommendations(GetRecommendationsRequest) returns (GetRecommendationsResponse) {}
+  
+  // Apply optimization changes
+  rpc ApplyOptimization(ApplyOptimizationRequest) returns (ApplyOptimizationResponse) {}
+}
+
+message Resource {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  string cloud_provider = 4;
+  string region = 5;
+  map<string, string> tags = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message ListResourcesRequest {
+  string cloud_provider = 1;
+  string resource_type = 2;
+}
+
+message ListResourcesResponse {
+  repeated Resource resources = 1;
+}
+
+message GetResourceMetricsRequest {
+  string resource_id = 1;
+  string cloud_provider = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+}
+
+message Metric {
+  string name = 1;
+  double value = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+message GetResourceMetricsResponse {
+  repeated Metric metrics = 1;
+}
+
+message Recommendation {
+  string resource_id = 1;
+  string current_size = 2;
+  string suggested_size = 3;
+  double estimated_savings = 4;
+  string reason = 5;
+}
+
+message GetRecommendationsRequest {
+  string cloud_provider = 1;
+  bool include_idle = 2;
+}
+
+message GetRecommendationsResponse {
+  repeated Recommendation recommendations = 1;
+}
+
+message ApplyOptimizationRequest {
+  string resource_id = 1;
+  string new_size = 2;
+  bool dry_run = 3;
+}
+
+message ApplyOptimizationResponse {
+  bool success = 1;
+  string message = 2;
+  string applied_changes = 3;
+} 

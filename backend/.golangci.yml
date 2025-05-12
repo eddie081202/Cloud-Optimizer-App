@@ -1,0 +1,8 @@
+run:
+  timeout: 3m
+
+linters:
+  enable:
+    - govet       # Phát hiện lỗi kiểu dữ liệu, nil pointer
+    - staticcheck # Cảnh báo patterns không tối ưu
+    - gofmt       # Kiểm tra format code
